@@ -6,37 +6,38 @@ function mostrarValor(valor) {
 
 function generatePassword() {
 
-  const result = document.getElementById("result");
-  result.classList.add("animar");
+  const length = parseInt(document.getElementById("length").value);
 
-  setTimeout(() => {
+  let caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    const length = document.getElementById("length").value;
+  const incluirNumeros = document.getElementById("numbers").checked;
+  const incluirSimbolos = document.getElementById("symbols").checked;
 
-    let caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  if (incluirNumeros) {
+    caracteres += "0123456789";
+  }
 
-    if (document.getElementById("numbers").checked) {
-      caracteres += "0123456789";
-    }
+  if (incluirSimbolos) {
+    caracteres += "!@#$%^&*()";
+  }
 
-    if (document.getElementById("symbols").checked) {
-      caracteres += "!@#$%^&*()";
-    }
+  if (caracteres.length === 0) {
+    alert("Selecione pelo menos uma opção de caractere.");
+    return;
+  }
 
-    let senha = "";
+  let senha = "";
 
-    for (let i = 0; i < length; i++) {
-      senha += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-    }
+  for (let i = 0; i < length; i++) {
+    senha += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+  }
 
-    result.textContent = senha;
-    result.classList.remove("animar");
+  document.getElementById("result").textContent = senha;
 
-    adicionarAoHistorico(senha);
-    avaliarForca(senha);
-
-  }, 150);
+  adicionarAoHistorico(senha);
+  avaliarForca(senha);
 }
+
 
 function validatePassword() {
   const password = document.getElementById("passwordCheck").value;
@@ -60,23 +61,83 @@ function avaliarForca(senha) {
 
   const barra = document.getElementById("forca-barra");
   const texto = document.getElementById("forca-texto");
+  const tempo = document.getElementById("tempo-quebra");
 
-  const maxLength = 12;
-  const percentual = (senha.length / maxLength) * 100;
+  const temMinuscula = /[a-z]/.test(senha);
+  const temMaiuscula = /[A-Z]/.test(senha);
+  const temNumero = /[0-9]/.test(senha);
+  const temSimbolo = /[^A-Za-z0-9]/.test(senha);
+  const comprimento = senha.length >= 12;
 
+  atualizarChecklist("check-length", comprimento);
+  atualizarChecklist("check-lower", temMinuscula);
+  atualizarChecklist("check-upper", temMaiuscula);
+  atualizarChecklist("check-number", temNumero);
+  atualizarChecklist("check-symbol", temSimbolo);
+
+  const criterios = [temMinuscula, temMaiuscula, temNumero, temSimbolo, comprimento]
+    .filter(Boolean).length;
+
+  const percentual = (criterios / 5) * 100;
   barra.style.width = percentual + "%";
 
-  if (senha.length < 6) {
-    barra.style.background = "linear-gradient(90deg, #ef4444, #dc2626)";
-    texto.textContent = "Fraca";
-  } else if (senha.length < 10) {
+  if (criterios === 5) {
+    barra.style.background = "linear-gradient(90deg, #22c55e, #16a34a)";
+    texto.textContent = "Forte";
+  } else if (criterios >= 3) {
     barra.style.background = "linear-gradient(90deg, #f59e0b, #d97706)";
     texto.textContent = "Média";
   } else {
-    barra.style.background = "linear-gradient(90deg, #22c55e, #16a34a)";
-    texto.textContent = "Forte";
+    barra.style.background = "linear-gradient(90deg, #ef4444, #dc2626)";
+    texto.textContent = "Fraca";
+  }
+
+  calcularTempoQuebra(senha);
+}
+
+
+function atualizarChecklist(id, valido) {
+  const item = document.getElementById(id);
+  if (valido) {
+    item.classList.add("ok");
+    item.textContent = item.textContent.replace("✖", "✔");
+  } else {
+    item.classList.remove("ok");
+    item.textContent = item.textContent.replace("✔", "✖");
   }
 }
+
+
+function calcularTempoQuebra(senha) {
+
+  let charset = 0;
+
+  if (/[a-z]/.test(senha)) charset += 26;
+  if (/[A-Z]/.test(senha)) charset += 26;
+  if (/[0-9]/.test(senha)) charset += 10;
+  if (/[^A-Za-z0-9]/.test(senha)) charset += 32;
+
+  const combinacoes = Math.pow(charset, senha.length);
+
+  const tentativasPorSegundo = 1e9; // 1 bilhão por segundo (ataque moderno)
+  const segundos = combinacoes / tentativasPorSegundo;
+
+  const tempo = document.getElementById("tempo-quebra");
+
+  if (segundos < 60) {
+    tempo.textContent = "Pode ser quebrada em segundos.";
+  } else if (segundos < 3600) {
+    tempo.textContent = "Pode ser quebrada em minutos.";
+  } else if (segundos < 86400) {
+    tempo.textContent = "Pode levar horas para quebrar.";
+  } else if (segundos < 31536000) {
+    tempo.textContent = "Pode levar anos para quebrar.";
+  } else {
+    tempo.textContent = "Levaria décadas ou mais para quebrar.";
+  }
+}
+
+
 
 function atualizarHistorico() {
   const ul = document.getElementById("historico");

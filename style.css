@@ -183,3 +183,21 @@ button:hover {
 }
 
 
+#checklist {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+  text-align: left;
+  font-size: 13px;
+}
+
+#checklist li {
+  margin: 4px 0;
+  color: #ef4444;
+  transition: 0.3s ease;
+}
+
+#checklist li.ok {
+  color: #22c55e;
+}
+
