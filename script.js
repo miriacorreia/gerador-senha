@@ -1,5 +1,9 @@
 let listaHistorico = JSON.parse(localStorage.getItem("historico")) || [];
 
+function mostrarValor(valor) {
+  document.getElementById("valor-tamanho").textContent = valor;
+}
+
 function generatePassword() {
 
   const result = document.getElementById("result");
