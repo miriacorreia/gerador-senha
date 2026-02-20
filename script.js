@@ -1,95 +1,91 @@
-let listaHistorico = [];
+let listaHistorico = JSON.parse(localStorage.getItem("historico")) || [];
 
 function generatePassword() {
+
+  const result = document.getElementById("result");
+  result.classList.add("animar");
+
+  setTimeout(() => {
+
     const length = document.getElementById("length").value;
-    const includeNumbers = document.getElementById("numbers").checked;
-    const includeSymbols = document.getElementById("symbols").checked;
 
-    const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const numbers = "0123456789";
-    const symbols = "!@#$%&*";
+    let caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    let chars = letters;
-    if (includeNumbers) chars += numbers;
-    if (includeSymbols) chars += symbols;
-
-    let password = "";
-
-    for (let i = 0; i < length; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    if (document.getElementById("numbers").checked) {
+      caracteres += "0123456789";
     }
 
-    document.getElementById("result").innerText = password;
+    if (document.getElementById("symbols").checked) {
+      caracteres += "!@#$%^&*()";
+    }
+
+    let senha = "";
+
+    for (let i = 0; i < length; i++) {
+      senha += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+
+    result.textContent = senha;
+    result.classList.remove("animar");
+
+    adicionarAoHistorico(senha);
+    avaliarForca(senha);
+
+  }, 150);
 }
-listaHistorico.unshift(senha);
-
-if (listaHistorico.length > 5) {
-  listaHistorico.pop();
-}
-
-atualizarHistorico();
-
-avaliarForca(senhaGerada);
 
 function validatePassword() {
-    const password = document.getElementById("passwordCheck").value;
+  const password = document.getElementById("passwordCheck").value;
 
-    let strength = 0;
+  let strength = 0;
 
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[!@#$%&*]/.test(password)) strength++;
+  if (password.length >= 8) strength++;
+  if (/[A-Z]/.test(password)) strength++;
+  if (/[0-9]/.test(password)) strength++;
+  if (/[!@#$%&*]/.test(password)) strength++;
 
-    let message = "Fraca";
+  let message = "Fraca";
 
-    if (strength >= 3) message = "Média";
-    if (strength === 4) message = "Forte";
+  if (strength >= 3) message = "Média";
+  if (strength === 4) message = "Forte";
 
-    document.getElementById("strength").innerText = "Força da senha: " + message;
+  document.getElementById("strength").innerText = "Força da senha: " + message;
 }
 
 function avaliarForca(senha) {
-  let pontos = 0;
-
-  if (senha.length >= 8) pontos++;
-  if (/[A-Z]/.test(senha)) pontos++;
-  if (/[0-9]/.test(senha)) pontos++;
-  if (/[^A-Za-z0-9]/.test(senha)) pontos++;
 
   const barra = document.getElementById("forca-barra");
   const texto = document.getElementById("forca-texto");
 
-  if (pontos <= 1) {
-    barra.style.width = "25%";
-    barra.style.backgroundColor = "red";
-    texto.textContent = "Senha Fraca";
-  } else if (pontos === 2) {
-    barra.style.width = "50%";
-    barra.style.backgroundColor = "orange";
-    texto.textContent = "Senha Média";
-  } else {
-    barra.style.width = "100%";
-    barra.style.backgroundColor = "green";
-    texto.textContent = "Senha Forte";
-  }
-}
+  let charset = 0;
 
-function copiarSenha() {
-  const senha = document.getElementById("result").textContent;
-  const msg = document.getElementById("copiado-msg");
+  if (/[a-z]/.test(senha)) charset += 26;
+  if (/[A-Z]/.test(senha)) charset += 26;
+  if (/[0-9]/.test(senha)) charset += 10;
+  if (/[^A-Za-z0-9]/.test(senha)) charset += 32;
 
-  if (!senha) {
-    msg.textContent = "Gere uma senha primeiro.";
+  if (charset === 0) {
+    barra.style.width = "0%";
+    texto.textContent = "";
     return;
   }
 
-  navigator.clipboard.writeText(senha);
-  msg.textContent = "Senha copiada com sucesso!";
-}
+  const entropia = senha.length * Math.log2(charset);
 
-function mostrarValor(valor) {
-  document.getElementById("valor-tamanho").textContent = valor;
+  let percentual = Math.min((entropia / 100) * 100, 100);
+
+  barra.style.width = percentual + "%";
+
+  if (entropia < 40) {
+    barra.style.background = "linear-gradient(90deg, #ef4444, #dc2626)";
+    texto.textContent = "Fraca";
+  } else if (entropia < 70) {
+    barra.style.background = "linear-gradient(90deg, #f59e0b, #d97706)";
+    texto.textContent = "Média";
+  } else {
+    barra.style.background = "linear-gradient(90deg, #22c55e, #16a34a)";
+    texto.textContent = "Forte";
+  }
 }
 
 function atualizarHistorico() {
@@ -101,5 +97,59 @@ function atualizarHistorico() {
     li.textContent = item;
     ul.appendChild(li);
   });
+
+  localStorage.setItem("historico", JSON.stringify(listaHistorico));
+}
+
+function limparHistorico() {
+  listaHistorico = [];
+  localStorage.removeItem("historico");
+  atualizarHistorico();
+}
+
+function adicionarAoHistorico(senha) {
+  listaHistorico.unshift(senha);
+
+  if (listaHistorico.length > 5) {
+    listaHistorico.pop();
+  }
+
+  localStorage.setItem("historico", JSON.stringify(listaHistorico));
+  atualizarHistorico();
+}
+
+atualizarHistorico();
+
+function copiarSenha() {
+  const senha = document.getElementById("result").textContent;
+  const msg = document.getElementById("copiado-msg");
+
+  if (!senha) {
+    msg.textContent = "Gere uma senha primeiro.";
+    return;
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(senha)
+      .then(() => {
+        msg.textContent = "Senha copiada com sucesso!";
+        setTimeout(() => msg.textContent = "", 2000);
+      })
+      .catch(() => fallbackCopy(senha, msg));
+  } else {
+    fallbackCopy(senha, msg);
+  }
+}
+
+function fallbackCopy(texto, msg) {
+  const textarea = document.createElement("textarea");
+  textarea.value = texto;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+
+  msg.textContent = "Senha copiada com sucesso!";
+  setTimeout(() => msg.textContent = "", 2000);
 }
 

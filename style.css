@@ -1,38 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #1e1e2f, #252540);
-  color: white;
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at 30% 20%, #111827, #0f172a 60%);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  margin: 0;
+  color: #e5e7eb;
+  position: relative;
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(34,197,94,0.15), transparent 70%);
+  filter: blur(120px);
+  z-index: 0;
 }
 
 .container {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 30px;
-  border-radius: 15px;
-  width: 350px;
+  position: relative;
+  z-index: 1;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(25px);
+  padding: 40px;
+  border-radius: 18px;
+  width: 380px;
   text-align: center;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  border: 1px solid rgba(34,197,94,0.15);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
 }
 
-input, button {
-  width: 100%;
-  margin-top: 10px;
+.container:hover {
+  transform: scale(1.02);
 }
+
+.container > * {
+  margin-top: 14px;
+}
+
+.container > h1:first-child {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 20px;
+}
+
+h3 {
+  font-size: 13px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-top: 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Inputs */
+
+input[type="range"] {
+  width: 100%;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  margin-top: 10px;
+  background: #1e293b;
+  color: white;
+  transition: 0.2s ease;
+}
+
+input[type="text"]:focus {
+  box-shadow: 0 0 0 2px rgba(34,197,94,0.4);
+}
+
+/* Botões */
 
 button {
-  padding: 10px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
   border: none;
-  background: #4CAF50;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
-  border-radius: 8px;
+  font-weight: 500;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.2s ease;
+  box-shadow: 0 6px 18px rgba(34,197,94,0.25);
 }
 
 button:hover {
-  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(34,197,94,0.45);
 }
+
+/* Histórico */
+
+#historico {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+#historico li {
+  background: rgba(255,255,255,0.06);
+  padding: 10px;
+  border-radius: 6px;
+  margin: 6px 0;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: #d1d5db;
+  border-left: 3px solid #22c55e;
+  transition: 0.2s ease;
+}
+
+#historico li:hover {
+  background: rgba(34,197,94,0.08);
+}
+
+/* Barra de força moderna */
+
+.forca-container {
+  width: 100%;
+  height: 8px;
+  background: #1f2937;
+  border-radius: 8px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+#forca-barra {
+  height: 100%;
+  width: 0%;
+  border-radius: 8px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+
+#forca-barra {
+  height: 100%;
+  width: 0%;
+  border-radius: 8px;
+  background-size: 200% 100%;
+  animation: brilho 3s linear infinite;
+  transition: width 0.5s ease;
+}
+
+@keyframes brilho {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+
+#result {
+  min-height: 28px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.animar {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+
