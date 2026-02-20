@@ -61,29 +61,15 @@ function avaliarForca(senha) {
   const barra = document.getElementById("forca-barra");
   const texto = document.getElementById("forca-texto");
 
-  let charset = 0;
-
-  if (/[a-z]/.test(senha)) charset += 26;
-  if (/[A-Z]/.test(senha)) charset += 26;
-  if (/[0-9]/.test(senha)) charset += 10;
-  if (/[^A-Za-z0-9]/.test(senha)) charset += 32;
-
-  if (charset === 0) {
-    barra.style.width = "0%";
-    texto.textContent = "";
-    return;
-  }
-
-  const entropia = senha.length * Math.log2(charset);
-
-  let percentual = Math.min((entropia / 100) * 100, 100);
+  const maxLength = 12;
+  const percentual = (senha.length / maxLength) * 100;
 
   barra.style.width = percentual + "%";
 
-  if (entropia < 40) {
+  if (senha.length < 6) {
     barra.style.background = "linear-gradient(90deg, #ef4444, #dc2626)";
     texto.textContent = "Fraca";
-  } else if (entropia < 70) {
+  } else if (senha.length < 10) {
     barra.style.background = "linear-gradient(90deg, #f59e0b, #d97706)";
     texto.textContent = "Média";
   } else {
