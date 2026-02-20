@@ -5,11 +5,16 @@
     <title>Gerador de Senha Segura</title>
     <link rel="stylesheet" href="style.css">
 </head>
+</div>
 <body>
+<div class="container">
+
 
     <h1>🔐 Gerador de Senha</h1>
 
-    <input type="number" id="length" placeholder="Tamanho da senha" min="4" max="20">
+    <input type="range" id="length" min="4" max="20" value="8" oninput="mostrarValor(this.value)">
+<p>Tamanho: <span id="valor-tamanho">8</span></p>
+
 
     <label>
         <input type="checkbox" id="numbers"> Incluir Números
@@ -22,8 +27,19 @@
     <button onclick="generatePassword()">Gerar Senha</button>
 
     <h2 id="result"></h2>
+<h3>Histórico</h3>
+<ul id="historico"></ul>
+<button onclick="copiarSenha()">Copiar Senha</button>
+<p id="copiado-msg"></p>
+
 
     <hr>
+
+    <div class="forca-container">
+    <div id="forca-barra"></div>
+    </div>
+    <p id="forca-texto"></p>
+
 
     <h1>🔎 Validador de Senha</h1>
     <input type="text" id="passwordCheck" placeholder="Digite uma senha">
