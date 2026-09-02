@@ -9,7 +9,7 @@ Projeto voltado para práticas iniciais de Cibersegurança e Desenvolvimento Web
 - Histórico das últimas senhas
 - Copiar com um clique
 
-## 🛠 Tecnologias utilizadas
+## Tecnologias utilizadas
 - HTML5
 - CSS3
 - JavaScript
