@@ -1,8 +1,8 @@
-# 🔐 Gerador de Senhas Seguro
+# Gerador de Senhas Seguro
 
 Projeto voltado para práticas iniciais de Cibersegurança e Desenvolvimento Web.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 - Geração de senha personalizada
 - Inclusão de números e símbolos
 - Medidor de força
@@ -14,7 +14,7 @@ Projeto voltado para práticas iniciais de Cibersegurança e Desenvolvimento Web
 - CSS3
 - JavaScript
 
-## 🌐 Acesse o projeto online
+## Acesse o projeto online
 https://miriacorreia.github.io/gerador-senha/
 
 ---
