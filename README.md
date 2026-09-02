@@ -1,6 +1,7 @@
-# Gerador de Senhas Seguro
+## Gerador de Senhas Seguro
 
-Projeto voltado para práticas iniciais de Cibersegurança e Desenvolvimento Web. Gerador de senhas web (em JavaScript)para garantir segurança e boas práticas de código, com foco em aleatoriedade real, garantia de regras e boa experiência do usuário.
+Projeto voltado para práticas iniciais de Cibersegurança e Desenvolvimento Web. 
+Gerador de senhas web (em JavaScript) para garantir segurança e boas práticas de código, com foco em aleatoriedade real, garantia de regras e boa experiência do usuário.
 
 ## Funcionalidades
 - Geração de senha personalizada
